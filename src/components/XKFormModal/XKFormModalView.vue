@@ -4,10 +4,11 @@
     :width="prop.width"
     :visible="prop.visible.value"
     centered
+    :destroyOnClose="true"
     @ok="methods.submit"
     @cancel="onCancel"
-    cancelText="取消"
-    okText="确认"
+    :cancelText="prop.cancelText"
+    :okText="prop.okText"
     @register="onRegister"
     :confirmLoading="confirmLoading"
   >
@@ -55,6 +56,10 @@
       beforeSubmit: {
         type: Function,
       },
+      okText: {
+        type: String,
+        default: () => '确认',
+      },
     },
     emits: ['submit', 'cancel', 'register', 'setFieldsValue', 'submitFinally'],
     setup(prop, { emit }) {
@@ -87,14 +92,16 @@
         if (prop.beforeSubmit) {
           params = prop.beforeSubmit(params);
         }
+        console.log(prop.submitApi);
         if (prop.submitApi) {
           prop.submitApi(params).then((data = {}) => {
             confirmLoading.value = false;
             emit('submit', { params, data });
           });
         } else {
-          confirmLoading.value = false;
           emit('submit', params);
+
+          confirmLoading.value = false;
         }
       }
       function submitFinally() {
@@ -103,8 +110,4 @@
     },
   });
 </script>
-<style scoped>
-  /deep/ .ant-input-number {
-    width: 100%;
-  }
-</style>
+ 
