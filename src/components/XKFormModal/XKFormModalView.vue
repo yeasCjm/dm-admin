@@ -60,6 +60,10 @@
         type: String,
         default: () => '确认',
       },
+      cancelText: {
+        type: String,
+        default: () => '取消',
+      },
     },
     emits: ['submit', 'cancel', 'register', 'setFieldsValue', 'submitFinally'],
     setup(prop, { emit }) {
